@@ -22,13 +22,14 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 	}
 }
 
-group = "com.crystaelix"
+group = "xyz.vintageforge"
 def baseVersion = '1.10'
 
 def ENV = System.getenv()
 //def runNumber = ENV.GITHUB_RUN_NUMBER ?: "9999"
 def runNumber = "0"
 
+//def isSnapshot = ENV.PR_NUM != null
 def isSnapshot = ENV.PR_NUM != null
 
 if (!isSnapshot) {
@@ -268,7 +269,7 @@ codenarc {
 gradlePlugin {
 	plugins {
 		fabricLoom {
-			id = 'com.crystaelix.loom'
+			id = 'xyz.vintageforge.loom'
 			implementationClass = 'net.fabricmc.loom.LoomGradlePlugin'
 		}
 	}
@@ -321,16 +322,16 @@ publishing {
 			snapshot(MavenPublication) { publication ->
 				groupId = project.group
 				artifactId = project.base.archivesName.get()
-				version = baseVersion + '-SNAPSHOT'
+				version = baseVersion + "-SNAPSHOT"
 
 				from components.java
 			}
 
 			// Manually crate the plugin marker for snapshot versions
 			snapshotPlugin(MavenPublication) {
-				groupId 'com.crystaelix.loom'
-				artifactId 'com.crystaelix.loom.gradle.plugin'
-				version baseVersion + '-SNAPSHOT'
+				groupId = "xyz.vintageforge.loom"
+				artifactId = "xyz.vintageforge.loom.gradle.plugin"
+				version = baseVersion + "-SNAPSHOT"
 
 				pom.withXml({
 					// Based off org.gradle.plugin.devel.plugins.MavenPluginPublishPlugin
@@ -349,12 +350,14 @@ publishing {
 		}
 	}
 
+
 	repositories {
-		if (project.hasProperty("CrystaelixMavenUsername") && project.hasProperty("CrystaelixMavenPassword")) {
-			maven {
-				name = "CrystaelixMaven"
-				url = "https://maven.crystaelix.com/releases/"
-				credentials(PasswordCredentials)
+		maven {
+			url = "https://repo.rafi67000.xyz/vintageforge"
+			name = "VintageForge"
+			credentials(org.gradle.api.credentials.PasswordCredentials)
+			authentication {
+				basic(BasicAuthentication)
 			}
 		}
 	}

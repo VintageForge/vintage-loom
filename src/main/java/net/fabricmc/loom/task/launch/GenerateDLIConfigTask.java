@@ -300,7 +300,7 @@ public abstract class GenerateDLIConfigTask extends AbstractLoomTask {
 						.argument("--userProperties")
 						.argument("{}");
 
-				String srgPath = !getExtension().isCleanroom()
+				String srgPath = !(getExtension().isCleanroom() || getExtension().isVintageForge())
 						? getExtension().getMappingConfiguration().srgToNamedSrg.toAbsolutePath().toString()
 						: getExtension().getMappingConfiguration().srgToNamedTsrg.toAbsolutePath().toString();
 

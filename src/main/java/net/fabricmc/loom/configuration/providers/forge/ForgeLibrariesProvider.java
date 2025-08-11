@@ -105,8 +105,8 @@ public class ForgeLibrariesProvider {
 			}
 
 			if ((lib.startsWith("org.lwjgl:lwjgl") || lib.startsWith("org.lwjgl3:lwjgl3")) && !lib.contains("natives")) {
-				// Fix Cleanroom lwjgl natives
-				if (extension.isCleanroom()) {
+				// Fix Cleanroom & VintageForge lwjgl natives
+				if (extension.isCleanroom() || extension.isVintageForge()) {
 					dependencies.add(project.getDependencies().create(lib + ":natives-" + getLWJGL3NativesClassifier()));
 				}
 			}
