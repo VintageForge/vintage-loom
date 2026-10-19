@@ -372,14 +372,14 @@ public abstract class AbstractMappedMinecraftProvider<M extends MinecraftProvide
 
 				Path deobfFile;
 
-				if (extension.isCleanroom()) {
+				if (extension.isCleanroom() || extension.isVintageForge()) {
 					deobfFile = fs.getPath("deobf_data-" + extension.getMinecraftVersion().get() + ".tsrg");
 				} else {
 					deobfFile = fs.getPath("deobfuscation_data-" + extension.getMinecraftVersion().get() + ".lzma");
 				}
 
 				try (Writer writer = new BufferedWriter(new OutputStreamWriter(new LZMACompressorOutputStream(Files.newOutputStream(deobfFile)), StandardCharsets.UTF_8))) {
-					MappingWriter mappingWriter = MappingWriter.create(writer, extension.isCleanroom() ? MappingFormat.TSRG_FILE : MappingFormat.SRG_FILE);
+					MappingWriter mappingWriter = MappingWriter.create(writer, (extension.isCleanroom() || extension.isVintageForge()) ? MappingFormat.TSRG_FILE : MappingFormat.SRG_FILE);
 					mappings.accept(mappingWriter);
 				}
 			}

@@ -340,7 +340,7 @@ public abstract class GenerateDLIConfigTask extends AbstractLoomTask {
 							.argument("--userProperties")
 							.argument("{}");
 
-					String srgPath = platform != ModPlatform.CLEANROOM
+					String srgPath = (platform != ModPlatform.CLEANROOM && platform != ModPlatform.VINTAGEFORGE)
 							? legacyForgeInputs.srgToNamedSrg()
 							: legacyForgeInputs.srgToNamedTSrg();
 
@@ -352,7 +352,7 @@ public abstract class GenerateDLIConfigTask extends AbstractLoomTask {
 							.property("mixin.env.remapRefMap", "true")
 							.property("mixin.env.refMapRemappingFile", srgPath);
 
-					if (platform == ModPlatform.CLEANROOM) {
+					if (platform == ModPlatform.CLEANROOM || platform == ModPlatform.VINTAGEFORGE) {
 						launchConfig.property("foundation.loadsall", "true");
 					}
 

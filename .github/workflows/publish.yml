@@ -1,16 +1,16 @@
 name: Publish
-on: workflow_dispatch
+on: [push, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: setup jdk
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           java-version: 25
           distribution: 'temurin'
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: gradle/actions/wrapper-validation@v6
       - name: Upload to Maven
-        run: ./gradlew publish --stacktrace -PCrystaelixMavenUsername="${{ secrets.MAVEN_USERNAME }}" -PCrystaelixMavenPassword="${{ secrets.MAVEN_PASSWORD }}"
+        run: ./gradlew publish --stacktrace -PVintageForgeUsername="${{ secrets.MAVEN_USERNAME }}" -PVintageForgePassword="${{ secrets.MAVEN_PASSWORD }}"

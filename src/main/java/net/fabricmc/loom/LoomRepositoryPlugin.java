@@ -51,21 +51,23 @@ public class LoomRepositoryPlugin implements Plugin<PluginAware> {
 
 	@Override
 	public void apply(PluginAware target) {
-		if (target instanceof Settings settings) {
-			declareRepositories(settings.getDependencyResolutionManagement().getRepositories(), LoomFiles.create(settings), settings);
+		switch (target) {
+			case Settings settings -> {
+				declareRepositories(settings.getDependencyResolutionManagement().getRepositories(), LoomFiles.create(settings), settings);
 
-			// leave a marker so projects don't try to override these
-			settings.getGradle().getPluginManager().apply(LoomRepositoryPlugin.class);
-		} else if (target instanceof Project project) {
-			if (project.getGradle().getPlugins().hasPlugin(LoomRepositoryPlugin.class)) {
-				return;
+				// leave a marker so projects don't try to override these
+				settings.getGradle().getPluginManager().apply(LoomRepositoryPlugin.class);
 			}
+			case Project project -> {
+				if (project.getGradle().getPlugins().hasPlugin(LoomRepositoryPlugin.class)) {
+					return;
+				}
 
-			declareRepositories(project.getRepositories(), LoomFiles.create(project), project);
-		} else if (target instanceof Gradle) {
-			return;
-		} else {
-			throw new IllegalArgumentException("Expected target to be a Project or Settings, but was a " + target.getClass());
+				declareRepositories(project.getRepositories(), LoomFiles.create(project), project);
+			}
+			case Gradle ignored -> {}
+			default ->
+					throw new IllegalArgumentException("Expected target to be a Project or Settings, but was a " + target.getClass());
 		}
 	}
 
